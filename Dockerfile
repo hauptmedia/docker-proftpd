@@ -1,11 +1,16 @@
-FROM	debian:jessie
+FROM		debian:jessie
 
-ENV     DEBIAN_FRONTEND noninteractive
+ENV     	DEBIAN_FRONTEND noninteractive
 
-RUN     apt-get update -qq && \
-        apt-get install -y proftpd && \
-        apt-get clean autoclean && \
-        apt-get autoremove --yes && \
-        rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN     	apt-get update -qq && \
+	        apt-get install -y proftpd && \
+	        apt-get clean autoclean && \
+	        apt-get autoremove --yes && \
+	        rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-CMD	["proftpd", "--nodaemon"]
+EXPOSE		20 21
+
+ADD		docker-entrypoint.sh /usr/local/sbin/docker-entrypoint.sh
+ENTRYPOINT	["/usr/local/sbin/docker-entrypoint.sh"]
+
+CMD		["proftpd", "--nodaemon"]
